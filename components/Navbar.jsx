@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const routes = [
   { name: "Home", href: "/" },
-  { name: "Users", href: "/users" },
-  { name: "Products", href: "/products" },
+  { name: "Artist", href: "/artists" },
+  // { name: "Products", href: "/products" },
 ];
 
 const user = {
@@ -38,12 +39,12 @@ export default function Navbar() {
         <ul className="flex items-center gap-1">
           {routes.map((route) => (
             <li key={route.href}>
-              <a
+              <Link
                 href={route.href}
                 className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:text-white"
               >
                 {route.name}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
