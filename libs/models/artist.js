@@ -18,6 +18,13 @@ const artistModel = {
             .from('artists')
             .select()
         return result;
+    },
+    create: async (payload) => {
+        return await supabase
+            .from('artists')
+            .insert(payload)
+            .select()
+            .single()
     }
 }
 
