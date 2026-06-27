@@ -1,24 +1,33 @@
-'use client'
+import songModel from "@/libs/models/song"
+import watchHistoryModel from "@/libs/models/watchHistory"
+import { getServerUser } from "@/libs/supabase-server"
+import ContinueListening from "@/components/dashboard/ContinueListening"
+import SongGrid from "@/components/dashboard/SongGrid"
 
-import Image from "next/image";
-import GithubSignInButton from '@/components/GithubSignInButton'
-import { getUser } from "@/libs/authentication";
-import { useEffect } from "react";
+export default async function Home() {
+  const [{ data: songs, error: songsError }, user] = await Promise.all([
+    songModel.getDiscoverList(),
+    getServerUser(),
+  ])
 
-export default function Home() {
+  let history = []
+  if (user) {
+    const { data } = await watchHistoryModel.listForUser(user.id)
+    history = data
+  }
+
+  if (songsError) {
+    return (
+      <div className="py-12 text-center text-[#AAAAAA]">
+        Unable to load songs. Check your Supabase connection.
+      </div>
+    )
+  }
+
   return (
     <div>
-      <div>
-        <h1>Welcome to the Home Page</h1>
-        <Image
-          src="/images/cover.png"
-          alt="Next.js Logo"
-          width={3840}
-          height="2160"
-          priority
-        />
-      </div>
-      <GithubSignInButton/>
+      <ContinueListening items={history} />
+      <SongGrid songs={songs} />
     </div>
-  );
+  )
 }

@@ -5,6 +5,7 @@
 -- ============================================================
 
 -- ── Drop existing (safe re-run) ──
+DROP TABLE IF EXISTS watch_history CASCADE;
 DROP TABLE IF EXISTS songs CASCADE;
 DROP TABLE IF EXISTS albums CASCADE;
 DROP TABLE IF EXISTS artists CASCADE;
@@ -399,3 +400,55 @@ INSERT INTO songs (id, album_id, track_number, title, duration_seconds, cover_im
 SELECT setval('artists_id_seq', (SELECT MAX(id) FROM artists));
 SELECT setval('albums_id_seq',  (SELECT MAX(id) FROM albums));
 SELECT setval('songs_id_seq',   (SELECT MAX(id) FROM songs));
+
+-- ── WATCH HISTORY (FK -> auth.users, songs) ──
+CREATE TABLE watch_history (
+  id           SERIAL PRIMARY KEY,
+  user_id      UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  song_id      INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  progress     INTEGER NOT NULL DEFAULT 0,
+  watched_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (user_id, song_id)
+);
+
+-- ── Indexes ──
+CREATE INDEX idx_albums_artist_id ON albums(artist_id);
+CREATE INDEX idx_songs_album_id ON songs(album_id);
+CREATE INDEX idx_watch_history_user_watched ON watch_history(user_id, watched_at DESC);
+CREATE INDEX idx_watch_history_song_id ON watch_history(song_id);
+
+-- ── Row Level Security: catalog (public read) ──
+ALTER TABLE artists ENABLE ROW LEVEL SECURITY;
+ALTER TABLE albums ENABLE ROW LEVEL SECURITY;
+ALTER TABLE songs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read artists"
+  ON artists FOR SELECT
+  USING (true);
+
+CREATE POLICY "Public read albums"
+  ON albums FOR SELECT
+  USING (true);
+
+CREATE POLICY "Public read songs"
+  ON songs FOR SELECT
+  USING (true);
+
+-- ── Row Level Security: watch_history (own rows only) ──
+ALTER TABLE watch_history ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users read own history"
+  ON watch_history FOR SELECT
+  USING (user_id = auth.uid());
+
+CREATE POLICY "Users insert own history"
+  ON watch_history FOR INSERT
+  WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users update own history"
+  ON watch_history FOR UPDATE
+  USING (user_id = auth.uid());
+
+CREATE POLICY "Users delete own history"
+  ON watch_history FOR DELETE
+  USING (user_id = auth.uid());

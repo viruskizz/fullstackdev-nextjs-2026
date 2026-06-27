@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# next2026
 
-## Getting Started
+A music catalog web app built with **Next.js 16**, **React 19**, **Tailwind CSS 4**, and **Supabase**. Browse artists, view profiles, and watch song videos embedded from YouTube.
 
-First, run the development server:
+Bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) and extended into a full-stack demo with server components, server actions, and PostgreSQL-backed data.
+
+## Features
+
+- **Artist catalog** — list, view, and create artists stored in Supabase
+- **Song pages** — song detail with embedded YouTube player
+- **GitHub sign-in** — Supabase Auth OAuth on the home page
+- **Shared layout** — Navbar and Footer across all pages
+- **Seed data** — sample artists, albums, and songs via `libs/dump.sql`
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 (App Router) |
+| UI | React 19, Tailwind CSS 4 |
+| Database | Supabase (PostgreSQL) |
+| Auth | Supabase Auth (GitHub OAuth) |
+| Language | TypeScript + JSX |
+
+## Quick Start
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env.local` with your Supabase credentials:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_KEY=your_supabase_anon_key
+```
+
+3. Load the database schema and seed data from `libs/dump.sql` in the Supabase SQL Editor.
+
+4. Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+For full setup instructions — environment variables, GitHub OAuth, database seeding, and deployment — see **[docs/setup.md](docs/setup.md)**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Routes
 
-## Learn More
+| Route | Description |
+|-------|-------------|
+| `/` | Home page with GitHub sign-in |
+| `/artists` | Artist listing |
+| `/artists/create` | Create a new artist |
+| `/artists/[id]` | Artist detail page |
+| `/songs/[id]` | Song detail with YouTube embed |
+| `/users` | Users page |
+| `/products` | Products page |
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+next2026/
+├── app/                  # Next.js App Router pages, layouts, and server actions
+│   ├── layout.tsx        # Root layout (Navbar, Footer, Roboto font)
+│   ├── page.jsx          # Home page
+│   ├── artists/          # Artist routes and createArtist action
+│   ├── songs/            # Song detail routes
+│   ├── users/
+│   └── products/
+├── components/           # Shared UI (Navbar, Footer, Button, Card, …)
+├── libs/                 # Supabase client, auth helpers, models, seed SQL
+├── public/               # Static assets
+└── docs/                 # Project documentation
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Setup guide](docs/setup.md) — install, configure, and run locally

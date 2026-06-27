@@ -16,8 +16,8 @@ const className = {
 
 export default async function Artists() {
 	let artists = []
-	const { data,error } = await artistModel.getAll(); 
-	artists = [...data];
+	const { data } = await artistModel.getAll();
+	artists = data ?? [];
 	return (
 		<div>
 			<h1 className="text-3xl font-bold my-4 text-center">Artists</h1>
