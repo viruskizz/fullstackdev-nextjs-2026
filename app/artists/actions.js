@@ -22,3 +22,7 @@ export async function createArtist(prevState, formData) {
 	revalidatePath('/artists')
 	redirect('/artists')
 }
+
+export async function updateArtist(params) {
+	
+}

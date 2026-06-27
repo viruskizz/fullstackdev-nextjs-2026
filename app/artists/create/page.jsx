@@ -1,6 +1,9 @@
+"use client"
 import supabase from '@/libs/supabase'
 import { redirect } from 'next/navigation'
-
+import artistModel from '@/libs/models/artist'
+import { useActionState } from 'react'
+import { createArtist } from '../actions'
 const className = {
 	card: 'card rounded-2xl shadow-md bg-white max-w-md mx-auto mt-3 p-6',
 	title: 'text-xl font-bold mb-4 text-black text-left',
@@ -12,21 +15,7 @@ const className = {
 }
 
 export default function ArtistCreate() {
-	const formAction = async (formData) => {
-		'use server'
-		const inputData = {
-			name: formData.get('name'),
-			genre: formData.get('genre'),
-			image: formData.get('image'),
-		}
-		const { data, error } = await supabase.from('artists')
-			.insert(inputData)
-			.select()
-			.single();
-		if (data) {
-			return redirect(`/artists/${data.id}`)
-		}
-	}
+	const [state, formAction] = useActionState(createArtist, null)
 	return (
 		<div className={className.card}>
 			<h2 className={className.title}>Create Artist</h2>

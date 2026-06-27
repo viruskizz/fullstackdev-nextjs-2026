@@ -49,7 +49,7 @@ export default function Navbar() {
           ))}
         </ul>
       </div>
-
+          
       <div className="flex items-center gap-4">
         <Image
           src={user.avatarUrl}
@@ -59,6 +59,7 @@ export default function Navbar() {
           unoptimized
           className="rounded-full"
         />
+        Username
       </div>
     </nav>
   );

@@ -25,7 +25,12 @@ const artistModel = {
             .insert(payload)
             .select()
             .single()
-    }
+    },
+    delete: async (id) => (await supabase
+        .from('artists')
+        .delete()
+        .eq('id', id)
+    ),
 }
 
 export default artistModel

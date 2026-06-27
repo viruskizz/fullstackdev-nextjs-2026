@@ -1,9 +1,11 @@
-import Image from "next/image";
-import Card from "@/components/Card"
-import Button from "@/components/Button"
-import Link from "next/link";
+'use client'
 
-export default async function Home() {
+import Image from "next/image";
+import GithubSignInButton from '@/components/GithubSignInButton'
+import { getUser } from "@/libs/authentication";
+import { useEffect } from "react";
+
+export default function Home() {
   return (
     <div>
       <div>
@@ -16,20 +18,7 @@ export default async function Home() {
           priority
         />
       </div>
-      <div>
-        <h2>List</h2>
-        <Card
-          imgUrl="/images/tidus.webp"
-          title="Tidus"
-          description="he main protagonist of Final Fantasy X"
-        >
-          <div className="card-button flex justify-end">
-            <Link href="/products">
-              <Button title="ZZZ"/>
-            </Link>
-          </div>
-        </Card>
-      </div>
+      <GithubSignInButton/>
     </div>
   );
 }
